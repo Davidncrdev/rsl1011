@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music School Pro - Sistema de Gestión Escolar</title>
+    <meta name="description" content="Sistema completo de gestión para escuelas de música con control de alumnos, horarios y aulas">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #2c3e50;
+            --secondary-light: #34495e;
+            --success-color: #27ae60;
+            --success-dark: #219653;
+            --warning-color: #f39c12;
+            --warning-dark: #e67e22;
+            --danger-color: #e74c3c;
+            --danger-dark: #c0392b;
+            --info-color: #1abc9c;
+            --info-dark: #16a085;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --gray-light: #f8f9fa;
+            --gray-medium: #e9ecef;
+            --gray-dark: #6c757d;
+            --aula-1: #3498db;
+            --aula-2: #e74c3c;
+            --aula-3: #2ecc71;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* App Container */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--secondary-color);
+            color: white;
+            padding: 0;
+            box-shadow: var(--shadow-lg);
+            z-index: 100;
+            transition: var(--transition);
+            position: relative;
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+
+        .logo {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo .subtitle {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .nav-links li {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-links a:hover::before {
+            left: 100%;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(255, 255, 255, 0.08);
+            border-left-color: var(--primary-color);
+            color: white;
+        }
+
+        .nav-links a.active {
+            background: rgba(52, 152, 219, 0.15);
+        }
+
+        .nav-icon {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            background: var(--gray-light);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .header h2 {
+            color: var(--secondary-color);
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: var(--shadow);
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.75rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary-color);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--info-color));
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card h3 {
+            color: var(--gray-dark);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-number {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            line-height: 1;
+        }
+
+        .stat-trend {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .trend-up { color: var(--success-color); }
+        .trend-down { color: var(--danger-color); }
+
+        /* Forms */
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            transition: var(--transition);
+        }
+
+        .form-container:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid var(--gray-medium);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transition: width 0.3s, height 0.3s, top 0.3s, left 0.3s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            left: -150px;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--gray-dark);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: var(--success-dark);
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: var(--danger-dark);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: var(--warning-dark);
+            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        /* Tables */
+        .table-container {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .table-container:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-medium);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            background: var(--gray-light);
+        }
+
+        .table-header h3 {
+            margin: 0;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .filtros {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filtros input,
+        .filtros select {
+            padding: 0.625rem;
+            border: 1px solid var(--gray-medium);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            min-width: 150px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-medium);
+        }
+
+        th {
+            background: var(--gray-light);
+            font-weight: 600;
+            color: var(--secondary-color);
+            position: sticky;
+            top: 0;
+        }
+
+        tbody tr {
+            transition: var(--transition);
+        }
+
+        tbody tr:hover {
+            background: rgba(52, 152, 219, 0.05);
+        }
+
+        .acciones {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Horario */
+        .horario-container {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .horario-container:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .horario-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-medium);
+            background: var(--gray-light);
+        }
+
+        .horario-grid {
+            display: grid;
+            grid-template-columns: 100px repeat(3, 1fr);
+            gap: 1px;
+            background: var(--gray-medium);
+        }
+
+        .horario-cell {
+            background: white;
+            padding: 1rem;
+            min-height: 100px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .horario-cell:hover {
+            background: var(--gray-light);
+        }
+
+        .horario-time {
+            background: var(--gray-light);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
+        .horario-aula {
+            background: var(--secondary-color);
+            color: white;
+            text-align: center;
+            font-weight: 600;
+            padding: 1rem 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .clase-item {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .clase-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .clase-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-success { background: var(--success-color); color: white; }
+        .badge-warning { background: var(--warning-color); color: white; }
+        .badge-danger { background: var(--danger-color); color: white; }
+        .badge-info { background: var(--info-color); color: white; }
+        .badge-primary { background: var(--primary-color); color: white; }
+        .badge-secondary { background: var(--gray-dark); color: white; }
+
+        /* Aula colors */
+        .aula-1 { background: var(--aula-1); }
+        .aula-2 { background: var(--aula-2); }
+        .aula-3 { background: var(--aula-3); }
+
+        /* Instrument colors */
+        .instrumento-bateria { background: #e74c3c; }
+        .instrumento-canto { background: #9b59b6; }
+        .instrumento-guitarra { background: #f39c12; }
+        .instrumento-bajo { background: #1abc9c; }
+
+        /* Loading States */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Empty States */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--gray-dark);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+
+        .toast {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideInRight 0.3s ease;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .toast.success { border-left-color: var(--success-color); }
+        .toast.error { border-left-color: var(--danger-color); }
+        .toast.warning { border-left-color: var(--warning-color); }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .app-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                max-height: 200px;
+            }
+
+            .nav-links {
+                display: flex;
+                overflow-x: auto;
+                padding: 0.5rem 1rem;
+            }
+
+            .nav-links li {
+                margin-bottom: 0;
+                flex-shrink: 0;
+            }
+
+            .nav-links a {
+                border-left: none;
+                border-bottom: 3px solid transparent;
+                padding: 0.75rem 1rem;
+                white-space: nowrap;
+            }
+
+            .nav-links a.active {
+                border-left: none;
+                border-bottom-color: var(--primary-color);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 1rem;
+            }
+
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .horario-grid {
+                grid-template-columns: 60px repeat(3, 1fr);
+                font-size: 0.8rem;
+            }
+
+            .filtros {
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
+            }
+
+            .filtros input,
+            .filtros select {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .table-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .horario-grid {
+                grid-template-columns: 50px repeat(3, 1fr);
+                font-size: 0.7rem;
+            }
+
+            .horario-cell {
+                padding: 0.5rem;
+                min-height: 80px;
+            }
+
+            th, td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .sidebar, .header, .btn, .filtros {
+                display: none !important;
+            }
+
+            .main-content {
+                margin: 0;
+                padding: 0;
+            }
+
+            .tab-content {
+                display: block !important;
+            }
+
+            .form-container, .table-container, .horario-container {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Toast Container -->
+        <div class="toast-container" id="toast-container"></div>
+
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>🎵 Music School Pro</h1>
+                <div class="subtitle">Sistema de Gestión Escolar</div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link active" data-tab="dashboard">
+                    <span class="nav-icon">📊</span>Dashboard
+                </a></li>
+                <li><a href="#" class="nav-link" data-tab="alumnos">
+                    <span class="nav-icon">👥</span>Gestión de Alumnos
+                </a></li>
+                <li><a href="#" class="nav-link" data-tab="horario">
+                    <span class="nav-icon">🕒</span>Horario Escolar
+                </a></li>
+                <li><a href="#" class="nav-link" data-tab="anotaciones">
+                    <span class="nav-icon">📝</span>Anotaciones
+                </a></li>
+                <li><a href="#" class="nav-link" data-tab="aulas">
+                    <span class="nav-icon">🏫</span>Gestión de Aulas
+                </a></li>
+                <li><a href="#" class="nav-link" data-tab="reportes">
+                    <span class="nav-icon">📈</span>Reportes
+                </a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h2 id="page-title">Dashboard</h2>
+                <div class="user-info">
+                    <div class="user-avatar">AD</div>
+                    <span>Administrador</span>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Dashboard -->
+                <section id="dashboard" class="tab-content active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Total Alumnos</h3>
+                            <div class="stat-number" id="total-alumnos">0</div>
+                            <div class="stat-trend trend-up">↑ 12% este mes</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Clases Hoy</h3>
+                            <div class="stat-number" id="clases-hoy">0</div>
+                            <div class="stat-trend" id="trend-clases-hoy">--</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Aulas Ocupadas</h3>
+                            <div class="stat-number" id="aulas-ocupadas">0/3</div>
+                            <div class="stat-trend" id="trend-aulas">--</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Nuevas Anotaciones</h3>
+                            <div class="stat-number" id="nuevas-anotaciones">0</div>
+                            <div class="stat-trend trend-up">↑ 5% esta semana</div>
+                        </div>
+                    </div>
+
+                    <div class="form-container">
+                        <h3>Vista Rápida del Horario de Hoy</h3>
+                        <div id="horario-hoy" class="loading"></div>
+                    </div>
+                </section>
+
+                <!-- Gestión de Alumnos -->
+                <section id="alumnos" class="tab-content">
+                    <div class="form-container">
+                        <h3>Agregar/Editar Alumno</h3>
+                        <form id="form-alumno">
+                            <input type="hidden" id="alumno-id">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="nombre">Nombre *</label>
+                                    <input type="text" id="nombre" required placeholder="Ingresa el nombre">
+                                </div>
+                                <div class="form-group">
+                                    <label for="apellido">Apellido *</label>
+                                    <input type="text" id="apellido" required placeholder="Ingresa el apellido">
+                                </div>
+                                <div class="form-group">
+                                    <label for="telefono">Teléfono</label>
+                                    <input type="tel" id="telefono" placeholder="+34 123 456 789">
+                                </div>
+                                <div class="form-group">
+                                    <label for="correo">Correo Electrónico</label>
+                                    <input type="email" id="correo" placeholder="alumno@ejemplo.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="color">Color Identificador</label>
+                                    <input type="color" id="color" value="#3498db">
+                                </div>
+                                <div class="form-group">
+                                    <label for="estado">Estado</label>
+                                    <select id="estado">
+                                        <option value="activo">Activo</option>
+                                        <option value="inactivo">Inactivo</option>
+                                        <option value="pendiente">Pendiente</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <h4 style="margin: 1.5rem 0 1rem 0; color: var(--secondary-color);">Horario del Alumno</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="instrumento">Instrumento *</label>
+                                    <select id="instrumento" required>
+                                        <option value="">Seleccionar instrumento</option>
+                                        <option value="bateria">🥁 Batería</option>
+                                        <option value="canto">🎤 Canto</option>
+                                        <option value="guitarra">🎸 Guitarra</option>
+                                        <option value="bajo">🎸 Bajo</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dia-clase">Día de Clase *</label>
+                                    <select id="dia-clase" required>
+                                        <option value="">Seleccionar día</option>
+                                        <option value="lunes">Lunes</option>
+                                        <option value="martes">Martes</option>
+                                        <option value="miercoles">Miércoles</option>
+                                        <option value="jueves">Jueves</option>
+                                        <option value="viernes">Viernes</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="hora-clase">Hora de Clase *</label>
+                                    <select id="hora-clase" required>
+                                        <option value="">Seleccionar hora</option>
+                                        <option value="16:00">16:00 - 17:00</option>
+                                        <option value="17:00">17:00 - 18:00</option>
+                                        <option value="18:00">18:00 - 19:00</option>
+                                        <option value="19:00">19:00 - 20:00</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="aula-clase">Aula *</label>
+                                    <select id="aula-clase" required>
+                                        <option value="">Seleccionar aula</option>
+                                        <option value="1">Aula 1</option>
+                                        <option value="2">Aula 2</option>
+                                        <option value="3">Aula 3</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">💾 Guardar Alumno</button>
+                                <button type="button" class="btn btn-secondary" id="btn-cancelar">❌ Cancelar</button>
+                                <button type="button" class="btn btn-warning" id="btn-limpiar">🧹 Limpiar Formulario</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3>Lista de Alumnos</h3>
+                            <div class="filtros">
+                                <input type="text" id="buscar-alumno" placeholder="Buscar alumno...">
+                                <select id="filtro-estado">
+                                    <option value="">Todos los estados</option>
+                                    <option value="activo">Activo</option>
+                                    <option value="inactivo">Inactivo</option>
+                                    <option value="pendiente">Pendiente</option>
+                                </select>
+                                <select id="filtro-instrumento">
+                                    <option value="">Todos los instrumentos</option>
+                                    <option value="bateria">Batería</option>
+                                    <option value="canto">Canto</option>
+                                    <option value="guitarra">Guitarra</option>
+                                    <option value="bajo">Bajo</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="tabla-alumnos-container">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">👥</div>
+                                <h3>No hay alumnos registrados</h3>
+                                <p>Comienza agregando tu primer alumno al sistema</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Horario Escolar -->
+                <section id="horario" class="tab-content">
+                    <div class="form-container">
+                        <div class="filtros">
+                            <select id="filtro-dia-horario">
+                                <option value="lunes">Lunes</option>
+                                <option value="martes">Martes</option>
+                                <option value="miercoles">Miércoles</option>
+                                <option value="jueves">Jueves</option>
+                                <option value="viernes">Viernes</option>
+                            </select>
+                            <button class="btn btn-primary" id="btn-hoy">Hoy</button>
+                            <button class="btn btn-secondary" id="btn-imprimir-horario">🖨️ Imprimir</button>
+                        </div>
+                    </div>
+
+                    <div class="horario-container">
+                        <div class="horario-header">
+                            <h3>Horario Escolar - <span id="dia-actual">Lunes</span></h3>
+                            <div class="filtros">
+                                <span class="badge badge-primary" id="total-clases-dia">0 clases</span>
+                                <span class="badge badge-success" id="aulas-disponibles">3 aulas disponibles</span>
+                            </div>
+                        </div>
+                        <div class="horario-grid" id="horario-grid"></div>
+                    </div>
+                </section>
+
+                <!-- Anotaciones -->
+                <section id="anotaciones" class="tab-content">
+                    <div class="form-container">
+                        <h3>Nueva Anotación</h3>
+                        <form id="form-anotacion">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="fecha-anotacion">Fecha *</label>
+                                    <input type="date" id="fecha-anotacion" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="hora-anotacion">Hora *</label>
+                                    <input type="time" id="hora-anotacion" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="alumno-anotacion">Alumno *</label>
+                                    <select id="alumno-anotacion" required>
+                                        <option value="">Cargando alumnos...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tipo-anotacion">Tipo *</label>
+                                    <select id="tipo-anotacion" required>
+                                        <option value="general">📋 General</option>
+                                        <option value="academica">📚 Académica</option>
+                                        <option value="conducta">👥 Conducta</option>
+                                        <option value="asistencia">✅ Asistencia</option>
+                                        <option value="pago">💰 Pago</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="contenido-anotacion">Contenido *</label>
+                                <textarea id="contenido-anotacion" rows="4" required placeholder="Describe la anotación..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">📝 Guardar Anotación</button>
+                        </form>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3>Historial de Anotaciones</h3>
+                            <div class="filtros">
+                                <input type="date" id="filtro-fecha">
+                                <select id="filtro-alumno-anotacion">
+                                    <option value="">Todos los alumnos</option>
+                                </select>
+                                <select id="filtro-tipo-anotacion">
+                                    <option value="">Todos los tipos</option>
+                                    <option value="general">General</option>
+                                    <option value="academica">Académica</option>
+                                    <option value="conducta">Conducta</option>
+                                    <option value="asistencia">Asistencia</option>
+                                    <option value="pago">Pago</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="lista-anotaciones-container">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📝</div>
+                                <h3>No hay anotaciones</h3>
+                                <p>Comienza agregando tu primera anotación</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Gestión de Aulas -->
+                <section id="aulas" class="tab-content">
+                    <div class="stats-grid">
+                        <div class="stat-card aula-1" style="color: white;">
+                            <h3>Aula 1</h3>
+                            <div class="stat-number" id="estado-aula-1">Disponible</div>
+                            <div>Capacidad: <span id="capacidad-aula-1">0/0</span></div>
+                            <div class="stat-trend" id="trend-aula-1">--</div>
+                        </div>
+                        <div class="stat-card aula-2" style="color: white;">
+                            <h3>Aula 2</h3>
+                            <div class="stat-number" id="estado-aula-2">Disponible</div>
+                            <div>Capacidad: <span id="capacidad-aula-2">0/0</span></div>
+                            <div class="stat-trend" id="trend-aula-2">--</div>
+                        </div>
+                        <div class="stat-card aula-3" style="color: white;">
+                            <h3>Aula 3</h3>
+                            <div class="stat-number" id="estado-aula-3">Disponible</div>
+                            <div>Capacidad: <span id="capacidad-aula-3">0/0</span></div>
+                            <div class="stat-trend" id="trend-aula-3">--</div>
+                        </div>
+                    </div>
+
+                    <div class="form-container">
+                        <h3>Configuración de Aulas</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="config-aula">Seleccionar Aula</label>
+                                <select id="config-aula">
+                                    <option value="1">Aula 1</option>
+                                    <option value="2">Aula 2</option>
+                                    <option value="3">Aula 3</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="capacidad-aula">Capacidad Máxima</label>
+                                <input type="number" id="capacidad-aula" min="1" max="50" value="10">
+                            </div>
+                            <div class="form-group">
+                                <label for="estado-aula">Estado</label>
+                                <select id="estado-aula">
+                                    <option value="disponible">Disponible</option>
+                                    <option value="mantenimiento">En Mantenimiento</option>
+                                    <option value="ocupada">Ocupada</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="btn-guardar-aula">💾 Guardar Configuración</button>
+                    </div>
+                </section>
+
+                <!-- Reportes -->
+                <section id="reportes" class="tab-content">
+                    <div class="form-container">
+                        <h3>Generar Reportes</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="tipo-reporte">Tipo de Reporte</label>
+                                <select id="tipo-reporte">
+                                    <option value="asistencia">📊 Asistencia por Alumno</option>
+                                    <option value="horarios">🕒 Ocupación de Horarios</option>
+                                    <option value="instrumentos">🎵 Distribución por Instrumento</option>
+                                    <option value="aulas">🏫 Uso de Aulas</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="fecha-inicio">Fecha Inicio</label>
+                                <input type="date" id="fecha-inicio">
+                            </div>
+                            <div class="form-group">
+                                <label for="fecha-fin">Fecha Fin</label>
+                                <input type="date" id="fecha-fin">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-primary" id="btn-generar-reporte">📊 Generar Reporte</button>
+                            <button class="btn btn-success" id="btn-exportar-excel">📄 Exportar Excel</button>
+                        </div>
+                    </div>
+
+                    <div class="table-container" id="contenedor-reporte" style="display: none;">
+                        <div class="table-header">
+                            <h3 id="titulo-reporte">Reporte</h3>
+                            <div class="filtros">
+                                <button class="btn btn-secondary" id="btn-exportar-pdf">📄 Exportar PDF</button>
+                                <button class="btn btn-warning" id="btn-imprimir-reporte">🖨️ Imprimir</button>
+                            </div>
+                        </div>
+                        <div id="contenido-reporte"></div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Toast Notification System
+        class Toast {
+            static show(message, type = 'info', duration = 5000) {
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `
+                    <span class="nav-icon">${this.getIcon(type)}</span>
+                    <span>${message}</span>
+                `;
+                container.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.remove();
+                }, duration);
+            }
+            
+            static getIcon(type) {
+                const icons = {
+                    'success': '✅',
+                    'error': '❌',
+                    'warning': '⚠️',
+                    'info': 'ℹ️'
+                };
+                return icons[type] || 'ℹ️';
+            }
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize date fields with today's date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('fecha-anotacion').value = today;
+            document.getElementById('filtro-fecha').value = today;
+            document.getElementById('fecha-inicio').value = today;
+            document.getElementById('fecha-fin').value = today;
+            
+            // Set current time
+            const now = new Date();
+            const timeString = now.getHours().toString().padStart(2, '0') + ':' + 
+                             now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('hora-anotacion').value = timeString;
+            
+            // Navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Hide all tab contents
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Show selected tab content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                    
+                    // Update page title
+                    const pageTitle = document.getElementById('page-title');
+                    pageTitle.textContent = this.textContent.trim();
+                    
+                    // Show toast notification
+                    Toast.show(`Navegando a: ${this.textContent.trim()}`, 'info', 2000);
+                });
+            });
+            
+            // Demo data for empty states
+            setTimeout(() => {
+                document.querySelectorAll('.loading').forEach(el => {
+                    el.classList.remove('loading');
+                    el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📊</div><h3>No hay datos disponibles</h3><p>Los datos se cargarán cuando agregues información al sistema</p></div>';
+                });
+            }, 1500);
+            
+            // Print functionality
+            document.getElementById('btn-imprimir-horario')?.addEventListener('click', function() {
+                window.print();
+            });
+            
+            document.getElementById('btn-imprimir-reporte')?.addEventListener('click', function() {
+                window.print();
+            });
+            
+            // Today button for schedule
+            document.getElementById('btn-hoy')?.addEventListener('click', function() {
+                const days = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
+                const today = new Date().getDay();
+                if (today >= 1 && today <= 5) {
+                    document.getElementById('filtro-dia-horario').value = days[today];
+                    Toast.show('Horario actualizado para hoy', 'success');
+                } else {
+                    Toast.show('No hay clases los fines de semana', 'warning');
+                }
+            });
+            
+            // Form reset functionality
+            document.getElementById('btn-limpiar')?.addEventListener('click', function() {
+                document.getElementById('form-alumno').reset();
+                document.getElementById('alumno-id').value = '';
+                Toast.show('Formulario limpiado', 'info');
+            });
+            
+            // Demo toast on load
+            setTimeout(() => {
+                Toast.show('Sistema Music School Pro cargado correctamente', 'success');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

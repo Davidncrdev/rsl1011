@@ -3,34 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music School Pro - Sistema de Gestión Escolar</title>
-    <meta name="description" content="Sistema completo de gestión para escuelas de música con control de alumnos, horarios y aulas">
+    <title>Rockschool Málaga - Sistema de Gestión</title>
+    <meta name="description" content="Sistema completo de gestión para Rockschool Málaga con control de alumnos, horarios y aulas">
     <style>
         :root {
-            --primary-color: #3498db;
-            --primary-dark: #2980b9;
+            --primary-color: #e74c3c;
+            --primary-dark: #c0392b;
             --secondary-color: #2c3e50;
             --secondary-light: #34495e;
+            --accent-color: #e67e22;
+            --accent-dark: #d35400;
             --success-color: #27ae60;
             --success-dark: #219653;
             --warning-color: #f39c12;
             --warning-dark: #e67e22;
             --danger-color: #e74c3c;
             --danger-dark: #c0392b;
-            --info-color: #1abc9c;
-            --info-dark: #16a085;
+            --info-color: #3498db;
+            --info-dark: #2980b9;
             --light-color: #ecf0f1;
             --dark-color: #2c3e50;
             --gray-light: #f8f9fa;
             --gray-medium: #e9ecef;
             --gray-dark: #6c757d;
-            --aula-1: #3498db;
-            --aula-2: #e74c3c;
+            --aula-1: #e74c3c;
+            --aula-2: #3498db;
             --aula-3: #2ecc71;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-            --radius: 8px;
-            --transition: all 0.3s ease;
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+            --radius: 10px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -44,9 +46,9 @@
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: #2c3e50;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             overflow-x: hidden;
@@ -61,8 +63,8 @@
 
         /* Sidebar */
         .sidebar {
-            width: 280px;
-            background: var(--secondary-color);
+            width: 300px;
+            background: linear-gradient(180deg, var(--secondary-color) 0%, #1a2530 100%);
             color: white;
             padding: 0;
             box-shadow: var(--shadow-lg);
@@ -74,49 +76,55 @@
         }
 
         .logo {
-            padding: 1.5rem;
+            padding: 2rem 1.5rem 1.5rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.2);
             position: sticky;
             top: 0;
             z-index: 10;
         }
 
         .logo h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, #fff 0%, #e74c3c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .logo .subtitle {
-            font-size: 0.8rem;
-            opacity: 0.8;
+            font-size: 0.85rem;
+            opacity: 0.9;
             font-weight: 400;
+            color: rgba(255, 255, 255, 0.8);
         }
 
         .nav-links {
             list-style: none;
-            padding: 1rem 0;
+            padding: 1.5rem 0;
         }
 
         .nav-links li {
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
         }
 
         .nav-links a {
             display: flex;
             align-items: center;
-            padding: 0.875rem 1.5rem;
-            color: rgba(255, 255, 255, 0.9);
+            padding: 1rem 1.5rem;
+            color: rgba(255, 255, 255, 0.85);
             text-decoration: none;
             transition: var(--transition);
             border-left: 4px solid transparent;
             font-weight: 500;
             position: relative;
             overflow: hidden;
+            font-size: 0.95rem;
         }
 
         .nav-links a::before {
@@ -126,8 +134,8 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(231, 76, 60, 0.2), transparent);
+            transition: left 0.6s;
         }
 
         .nav-links a:hover::before {
@@ -136,20 +144,23 @@
 
         .nav-links a:hover,
         .nav-links a.active {
-            background: rgba(255, 255, 255, 0.08);
+            background: linear-gradient(90deg, rgba(231, 76, 60, 0.15), transparent);
             border-left-color: var(--primary-color);
             color: white;
+            transform: translateX(5px);
         }
 
         .nav-links a.active {
-            background: rgba(52, 152, 219, 0.15);
+            background: linear-gradient(90deg, rgba(231, 76, 60, 0.25), transparent);
+            box-shadow: inset 0 0 20px rgba(231, 76, 60, 0.1);
         }
 
         .nav-icon {
-            margin-right: 0.75rem;
-            width: 20px;
+            margin-right: 1rem;
+            width: 24px;
             text-align: center;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            opacity: 0.9;
         }
 
         /* Main Content */
@@ -162,8 +173,8 @@
         }
 
         .header {
-            background: white;
-            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            padding: 1.25rem 2.5rem;
             box-shadow: var(--shadow);
             display: flex;
             justify-content: space-between;
@@ -171,12 +182,17 @@
             position: sticky;
             top: 0;
             z-index: 90;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .header h2 {
             color: var(--secondary-color);
-            font-weight: 600;
-            font-size: 1.5rem;
+            font-weight: 700;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .user-info {
@@ -186,55 +202,65 @@
         }
 
         .user-avatar {
-            width: 42px;
-            height: 42px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: bold;
             box-shadow: var(--shadow);
+            border: 3px solid white;
+            font-size: 1.1rem;
         }
 
         .content-area {
             flex: 1;
-            padding: 2rem;
+            padding: 2.5rem;
             overflow-y: auto;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         }
 
         .tab-content {
             display: none;
-            animation: fadeIn 0.3s ease;
+            animation: fadeInUp 0.4s ease;
         }
 
         .tab-content.active {
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
         }
 
         /* Dashboard */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.75rem;
+            margin-bottom: 2.5rem;
         }
 
         .stat-card {
-            background: white;
-            padding: 1.75rem;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            padding: 2rem;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            border-left: 4px solid var(--primary-color);
+            border-left: 5px solid var(--primary-color);
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .stat-card::before {
@@ -244,28 +270,44 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--info-color));
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(231, 76, 60, 0.03), transparent);
+            transition: var(--transition);
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
             box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card:hover::after {
+            transform: rotate(45deg);
         }
 
         .stat-card h3 {
             color: var(--gray-dark);
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .stat-number {
-            font-size: 2.25rem;
-            font-weight: 700;
+            font-size: 2.5rem;
+            font-weight: 800;
             color: var(--secondary-color);
             line-height: 1;
+            margin-bottom: 0.5rem;
         }
 
         .stat-trend {
@@ -273,55 +315,61 @@
             margin-top: 0.5rem;
             display: flex;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.5rem;
+            font-weight: 500;
         }
 
         .trend-up { color: var(--success-color); }
         .trend-down { color: var(--danger-color); }
+        .trend-warning { color: var(--warning-color); }
+        .trend-info { color: var(--info-color); }
 
         /* Forms */
         .form-container {
-            background: white;
-            padding: 2rem;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            padding: 2.5rem;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             margin-bottom: 2rem;
             transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .form-container:hover {
             box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.75rem;
+            margin-bottom: 2rem;
         }
 
         .form-group {
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
             font-weight: 600;
             color: var(--secondary-color);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 0.875rem;
+            padding: 1rem 1.25rem;
             border: 2px solid var(--gray-medium);
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 1rem;
             transition: var(--transition);
             background: white;
+            font-family: inherit;
         }
 
         .form-group input:focus,
@@ -329,30 +377,32 @@
         .form-group textarea:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+            transform: translateY(-1px);
         }
 
         .form-actions {
             display: flex;
             gap: 1rem;
-            margin-top: 1.5rem;
+            margin-top: 2rem;
             flex-wrap: wrap;
         }
 
         /* Buttons */
         .btn {
-            padding: 0.875rem 1.75rem;
+            padding: 1rem 2rem;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 1rem;
             font-weight: 600;
             transition: var(--transition);
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
             position: relative;
             overflow: hidden;
+            font-family: inherit;
         }
 
         .btn::before {
@@ -364,7 +414,7 @@
             height: 0;
             background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
-            transition: width 0.3s, height 0.3s, top 0.3s, left 0.3s;
+            transition: var(--transition);
         }
 
         .btn:hover::before {
@@ -375,71 +425,94 @@
         }
 
         .btn:active {
-            transform: translateY(1px);
+            transform: translateY(2px);
         }
 
         .btn-primary {
-            background: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
             color: white;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
         }
 
         .btn-primary:hover {
-            background: var(--primary-dark);
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+            transform: translateY(-2px);
         }
 
         .btn-secondary {
-            background: var(--gray-dark);
+            background: linear-gradient(135deg, var(--gray-dark), #5a6268);
             color: white;
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
         }
 
         .btn-secondary:hover {
-            background: #5a6268;
-            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+            background: linear-gradient(135deg, #5a6268, var(--gray-dark));
+            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+            transform: translateY(-2px);
         }
 
         .btn-success {
-            background: var(--success-color);
+            background: linear-gradient(135deg, var(--success-color), var(--success-dark));
             color: white;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
         }
 
         .btn-success:hover {
-            background: var(--success-dark);
-            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+            background: linear-gradient(135deg, var(--success-dark), var(--success-color));
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+            transform: translateY(-2px);
         }
 
         .btn-danger {
-            background: var(--danger-color);
+            background: linear-gradient(135deg, var(--danger-color), var(--danger-dark));
             color: white;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
         }
 
         .btn-danger:hover {
-            background: var(--danger-dark);
-            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+            background: linear-gradient(135deg, var(--danger-dark), var(--danger-color));
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+            transform: translateY(-2px);
         }
 
         .btn-warning {
-            background: var(--warning-color);
+            background: linear-gradient(135deg, var(--warning-color), var(--warning-dark));
             color: white;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
         }
 
         .btn-warning:hover {
-            background: var(--warning-dark);
-            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+            background: linear-gradient(135deg, var(--warning-dark), var(--warning-color));
+            box-shadow: 0 8px 25px rgba(243, 156, 18, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, var(--info-color), var(--info-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-info:hover {
+            background: linear-gradient(135deg, var(--info-dark), var(--info-color));
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+            transform: translateY(-2px);
         }
 
         .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
         }
 
         /* Tables */
         .table-container {
-            background: white;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             overflow: hidden;
             transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .table-container:hover {
@@ -447,20 +520,21 @@
         }
 
         .table-header {
-            padding: 1.5rem;
+            padding: 1.75rem 2rem;
             border-bottom: 1px solid var(--gray-medium);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 1rem;
-            background: var(--gray-light);
+            gap: 1.5rem;
+            background: linear-gradient(135deg, var(--gray-light) 0%, #e9ecef 100%);
         }
 
         .table-header h3 {
             margin: 0;
             color: var(--secondary-color);
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 1.4rem;
         }
 
         .filtros {
@@ -472,11 +546,19 @@
 
         .filtros input,
         .filtros select {
-            padding: 0.625rem;
-            border: 1px solid var(--gray-medium);
-            border-radius: 4px;
-            font-size: 0.9rem;
-            min-width: 150px;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--gray-medium);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            min-width: 160px;
+            transition: var(--transition);
+        }
+
+        .filtros input:focus,
+        .filtros select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
         }
 
         table {
@@ -485,17 +567,18 @@
         }
 
         th, td {
-            padding: 1rem;
+            padding: 1.25rem 1.5rem;
             text-align: left;
             border-bottom: 1px solid var(--gray-medium);
         }
 
         th {
-            background: var(--gray-light);
-            font-weight: 600;
+            background: linear-gradient(135deg, var(--gray-light) 0%, #e9ecef 100%);
+            font-weight: 700;
             color: var(--secondary-color);
             position: sticky;
             top: 0;
+            font-size: 0.95rem;
         }
 
         tbody tr {
@@ -503,22 +586,24 @@
         }
 
         tbody tr:hover {
-            background: rgba(52, 152, 219, 0.05);
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.05), transparent);
+            transform: translateX(5px);
         }
 
         .acciones {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.75rem;
             flex-wrap: wrap;
         }
 
         /* Horario */
         .horario-container {
-            background: white;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             overflow: hidden;
             transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .horario-container:hover {
@@ -526,22 +611,22 @@
         }
 
         .horario-header {
-            padding: 1.5rem;
+            padding: 1.75rem 2rem;
             border-bottom: 1px solid var(--gray-medium);
-            background: var(--gray-light);
+            background: linear-gradient(135deg, var(--gray-light) 0%, #e9ecef 100%);
         }
 
         .horario-grid {
             display: grid;
-            grid-template-columns: 100px repeat(3, 1fr);
+            grid-template-columns: 120px repeat(3, 1fr);
             gap: 1px;
             background: var(--gray-medium);
         }
 
         .horario-cell {
             background: white;
-            padding: 1rem;
-            min-height: 100px;
+            padding: 1.25rem;
+            min-height: 120px;
             transition: var(--transition);
             position: relative;
         }
@@ -551,36 +636,39 @@
         }
 
         .horario-time {
-            background: var(--gray-light);
-            font-weight: 600;
+            background: linear-gradient(135deg, var(--gray-light) 0%, #e9ecef 100%);
+            font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--secondary-color);
-            font-size: 0.9rem;
+            font-size: 1rem;
+            flex-direction: column;
+            gap: 0.25rem;
         }
 
         .horario-aula {
-            background: var(--secondary-color);
+            background: linear-gradient(135deg, var(--secondary-color), #1a2530);
             color: white;
             text-align: center;
-            font-weight: 600;
-            padding: 1rem 0.5rem;
-            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 1.25rem 0.75rem;
+            font-size: 1rem;
         }
 
         .clase-item {
             background: var(--primary-color);
             color: white;
-            padding: 0.75rem;
-            border-radius: 6px;
-            margin-bottom: 0.5rem;
-            font-size: 0.8rem;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
             cursor: pointer;
             transition: var(--transition);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
             position: relative;
             overflow: hidden;
+            border-left: 4px solid rgba(255, 255, 255, 0.5);
         }
 
         .clase-item::before {
@@ -594,38 +682,65 @@
         }
 
         .clase-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
         }
 
         /* Badges */
         .badge {
             display: inline-block;
-            padding: 0.35rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .badge-success { background: var(--success-color); color: white; }
-        .badge-warning { background: var(--warning-color); color: white; }
-        .badge-danger { background: var(--danger-color); color: white; }
-        .badge-info { background: var(--info-color); color: white; }
-        .badge-primary { background: var(--primary-color); color: white; }
-        .badge-secondary { background: var(--gray-dark); color: white; }
+        .badge-success { 
+            background: linear-gradient(135deg, var(--success-color), var(--success-dark));
+            color: white; 
+        }
+        .badge-warning { 
+            background: linear-gradient(135deg, var(--warning-color), var(--warning-dark));
+            color: white; 
+        }
+        .badge-danger { 
+            background: linear-gradient(135deg, var(--danger-color), var(--danger-dark));
+            color: white; 
+        }
+        .badge-info { 
+            background: linear-gradient(135deg, var(--info-color), var(--info-dark));
+            color: white; 
+        }
+        .badge-primary { 
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white; 
+        }
+        .badge-secondary { 
+            background: linear-gradient(135deg, var(--gray-dark), #5a6268);
+            color: white; 
+        }
 
         /* Aula colors */
-        .aula-1 { background: var(--aula-1); }
-        .aula-2 { background: var(--aula-2); }
-        .aula-3 { background: var(--aula-3); }
+        .aula-1 { 
+            background: linear-gradient(135deg, var(--aula-1), #c0392b);
+            color: white; 
+        }
+        .aula-2 { 
+            background: linear-gradient(135deg, var(--aula-2), #2980b9);
+            color: white; 
+        }
+        .aula-3 { 
+            background: linear-gradient(135deg, var(--aula-3), #27ae60);
+            color: white; 
+        }
 
         /* Instrument colors */
-        .instrumento-bateria { background: #e74c3c; }
-        .instrumento-canto { background: #9b59b6; }
-        .instrumento-guitarra { background: #f39c12; }
-        .instrumento-bajo { background: #1abc9c; }
+        .instrumento-bateria { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .instrumento-canto { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .instrumento-guitarra { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .instrumento-bajo { background: linear-gradient(135deg, #1abc9c, #16a085); }
 
         /* Loading States */
         .loading {
@@ -640,7 +755,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            background: linear-gradient(90deg, transparent, rgba(231, 76, 60, 0.1), transparent);
             animation: loading 1.5s infinite;
         }
 
@@ -652,48 +767,108 @@
         /* Empty States */
         .empty-state {
             text-align: center;
-            padding: 3rem 2rem;
+            padding: 4rem 2rem;
             color: var(--gray-dark);
         }
 
         .empty-state-icon {
-            font-size: 4rem;
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.6;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
             margin-bottom: 1rem;
-            opacity: 0.5;
+            color: var(--secondary-color);
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            opacity: 0.8;
         }
 
         /* Toast Notifications */
         .toast-container {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 25px;
+            right: 25px;
             z-index: 1000;
-            max-width: 400px;
+            max-width: 450px;
         }
 
         .toast {
-            background: white;
-            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            padding: 1.25rem 1.75rem;
             border-radius: var(--radius);
             box-shadow: var(--shadow-lg);
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
-            animation: slideInRight 0.3s ease;
-            border-left: 4px solid var(--primary-color);
+            gap: 1.25rem;
+            animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 5px solid var(--primary-color);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .toast.success { border-left-color: var(--success-color); }
         .toast.error { border-left-color: var(--danger-color); }
         .toast.warning { border-left-color: var(--warning-color); }
+        .toast.info { border-left-color: var(--info-color); }
 
         @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from { 
+                transform: translateX(100%); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateX(0); 
+                opacity: 1; 
+            }
+        }
+
+        /* Vista Botones */
+        .vista-buttons {
+            display: flex;
+            gap: 0.75rem;
+            margin-left: auto;
+        }
+
+        .btn-vista {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--gray-medium);
+            background: white;
+            color: var(--gray-dark);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .btn-vista.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-vista:hover:not(.active) {
+            background: var(--gray-light);
+            border-color: var(--primary-color);
         }
 
         /* Responsive */
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 260px;
+            }
+            
+            .content-area {
+                padding: 2rem;
+            }
+        }
+
         @media (max-width: 1024px) {
             .app-container {
                 flex-direction: column;
@@ -701,13 +876,14 @@
 
             .sidebar {
                 width: 100%;
-                max-height: 200px;
+                max-height: 220px;
             }
 
             .nav-links {
                 display: flex;
                 overflow-x: auto;
-                padding: 0.5rem 1rem;
+                padding: 1rem;
+                gap: 0.5rem;
             }
 
             .nav-links li {
@@ -718,25 +894,27 @@
             .nav-links a {
                 border-left: none;
                 border-bottom: 3px solid transparent;
-                padding: 0.75rem 1rem;
+                padding: 1rem 1.25rem;
                 white-space: nowrap;
+                border-radius: 8px;
             }
 
             .nav-links a.active {
                 border-left: none;
                 border-bottom-color: var(--primary-color);
+                background: rgba(231, 76, 60, 0.1);
             }
         }
 
         @media (max-width: 768px) {
             .content-area {
-                padding: 1rem;
+                padding: 1.5rem;
             }
 
             .header {
-                padding: 1rem;
+                padding: 1.25rem 1.5rem;
                 flex-direction: column;
-                gap: 1rem;
+                gap: 1.25rem;
                 align-items: flex-start;
             }
 
@@ -745,14 +923,15 @@
             }
 
             .horario-grid {
-                grid-template-columns: 60px repeat(3, 1fr);
-                font-size: 0.8rem;
+                grid-template-columns: 80px repeat(3, 1fr);
+                font-size: 0.85rem;
             }
 
             .filtros {
                 flex-direction: column;
                 align-items: stretch;
                 width: 100%;
+                gap: 1rem;
             }
 
             .filtros input,
@@ -764,6 +943,7 @@
             .table-header {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: 1.25rem;
             }
 
             .form-actions {
@@ -777,28 +957,47 @@
 
             .stats-grid {
                 grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+
+            .vista-buttons {
+                margin-left: 0;
+                width: 100%;
+                justify-content: center;
             }
         }
 
         @media (max-width: 480px) {
+            .content-area {
+                padding: 1rem;
+            }
+
             .horario-grid {
-                grid-template-columns: 50px repeat(3, 1fr);
-                font-size: 0.7rem;
+                grid-template-columns: 60px repeat(3, 1fr);
+                font-size: 0.75rem;
             }
 
             .horario-cell {
-                padding: 0.5rem;
-                min-height: 80px;
+                padding: 0.75rem;
+                min-height: 100px;
             }
 
             th, td {
-                padding: 0.75rem 0.5rem;
+                padding: 1rem 0.75rem;
+            }
+
+            .stat-card {
+                padding: 1.5rem;
+            }
+
+            .form-container {
+                padding: 1.5rem;
             }
         }
 
         /* Print Styles */
         @media print {
-            .sidebar, .header, .btn, .filtros {
+            .sidebar, .header, .btn, .filtros, .toast-container {
                 display: none !important;
             }
 
@@ -814,6 +1013,12 @@
             .form-container, .table-container, .horario-container {
                 box-shadow: none;
                 border: 1px solid #ddd;
+                margin: 1rem 0;
+            }
+
+            .stat-card {
+                box-shadow: none;
+                border: 1px solid #ddd;
             }
         }
     </style>
@@ -826,7 +1031,7 @@
         <!-- Sidebar -->
         <nav class="sidebar">
             <div class="logo">
-                <h1>🎵 Music School Pro</h1>
+                <h1>🎸 Rockschool Málaga</h1>
                 <div class="subtitle">Sistema de Gestión Escolar</div>
             </div>
             <ul class="nav-links">
@@ -848,15 +1053,18 @@
                 <li><a href="#" class="nav-link" data-tab="reportes">
                     <span class="nav-icon">📈</span>Reportes
                 </a></li>
+                <li><a href="#" class="nav-link" data-tab="admin-datos">
+                    <span class="nav-icon">💾</span>Administrar Datos
+                </a></li>
             </ul>
         </nav>
 
         <!-- Main Content -->
         <main class="main-content">
             <header class="header">
-                <h2 id="page-title">Dashboard</h2>
+                <h2 id="page-title">Dashboard - Rockschool Málaga</h2>
                 <div class="user-info">
-                    <div class="user-avatar">AD</div>
+                    <div class="user-avatar">RS</div>
                     <span>Administrador</span>
                 </div>
             </header>
@@ -893,98 +1101,160 @@
                     </div>
                 </section>
 
+                <!-- Administrar Datos -->
+                <section id="admin-datos" class="tab-content">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Uso de Almacenamiento</h3>
+                            <div class="stat-number" id="uso-almacenamiento">0 MB</div>
+                            <div class="stat-trend" id="info-almacenamiento">--</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total de Registros</h3>
+                            <div class="stat-number" id="total-registros">0</div>
+                            <div class="stat-trend" id="detalle-registros">--</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Último Respaldo</h3>
+                            <div class="stat-number" id="ultimo-backup">--</div>
+                            <div class="stat-trend" id="estado-backup">--</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Integridad</h3>
+                            <div class="stat-number" id="estado-integridad">✅</div>
+                            <div class="stat-trend" id="info-integridad">Sistema OK</div>
+                        </div>
+                    </div>
+
+                    <div class="form-container">
+                        <h3>Respaldo y Restauración</h3>
+                        <div class="form-actions">
+                            <button class="btn btn-primary" id="btn-crear-respaldo">💾 Crear Respaldo</button>
+                            <button class="btn btn-warning" id="btn-restaurar-respaldo">🔄 Restaurar Respaldo</button>
+                            <button class="btn btn-success" id="btn-exportar-datos">📤 Exportar Datos</button>
+                            <button class="btn btn-info" id="btn-importar-datos">📥 Importar Datos</button>
+                        </div>
+                    </div>
+
+                    <div class="form-container">
+                        <h3>Mantenimiento del Sistema</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="dias-limpiar">Limpiar anotaciones antiguas (días)</label>
+                                <input type="number" id="dias-limpiar" min="1" max="365" value="30">
+                            </div>
+                            <div class="form-group">
+                                <label for="accion-mantenimiento">Acción de Mantenimiento</label>
+                                <select id="accion-mantenimiento">
+                                    <option value="limpiar">Limpiar datos antiguos</option>
+                                    <option value="optimizar">Optimizar almacenamiento</option>
+                                    <option value="validar">Validar integridad</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-warning" id="btn-ejecutar-mantenimiento">🛠️ Ejecutar Mantenimiento</button>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3>Estadísticas Detalladas del Sistema</h3>
+                        </div>
+                        <div id="estadisticas-detalladas"></div>
+                    </div>
+                </section>
+
                 <!-- Gestión de Alumnos -->
                 <section id="alumnos" class="tab-content">
                     <div class="form-container">
                         <h3>Agregar/Editar Alumno</h3>
                         <form id="form-alumno">
-                            <input type="hidden" id="alumno-id">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="nombre">Nombre *</label>
-                                    <input type="text" id="nombre" required placeholder="Ingresa el nombre">
-                                </div>
-                                <div class="form-group">
-                                    <label for="apellido">Apellido *</label>
-                                    <input type="text" id="apellido" required placeholder="Ingresa el apellido">
-                                </div>
-                                <div class="form-group">
-                                    <label for="telefono">Teléfono</label>
-                                    <input type="tel" id="telefono" placeholder="+34 123 456 789">
-                                </div>
-                                <div class="form-group">
-                                    <label for="correo">Correo Electrónico</label>
-                                    <input type="email" id="correo" placeholder="alumno@ejemplo.com">
-                                </div>
-                                <div class="form-group">
-                                    <label for="color">Color Identificador</label>
-                                    <input type="color" id="color" value="#3498db">
-                                </div>
-                                <div class="form-group">
-                                    <label for="estado">Estado</label>
-                                    <select id="estado">
-                                        <option value="activo">Activo</option>
-                                        <option value="inactivo">Inactivo</option>
-                                        <option value="pendiente">Pendiente</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <h4 style="margin: 1.5rem 0 1rem 0; color: var(--secondary-color);">Horario del Alumno</h4>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="instrumento">Instrumento *</label>
-                                    <select id="instrumento" required>
-                                        <option value="">Seleccionar instrumento</option>
-                                        <option value="bateria">🥁 Batería</option>
-                                        <option value="canto">🎤 Canto</option>
-                                        <option value="guitarra">🎸 Guitarra</option>
-                                        <option value="bajo">🎸 Bajo</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="dia-clase">Día de Clase *</label>
-                                    <select id="dia-clase" required>
-                                        <option value="">Seleccionar día</option>
-                                        <option value="lunes">Lunes</option>
-                                        <option value="martes">Martes</option>
-                                        <option value="miercoles">Miércoles</option>
-                                        <option value="jueves">Jueves</option>
-                                        <option value="viernes">Viernes</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="hora-clase">Hora de Clase *</label>
-                                    <select id="hora-clase" required>
-                                        <option value="">Seleccionar hora</option>
-                                        <option value="16:00">16:00 - 17:00</option>
-                                        <option value="17:00">17:00 - 18:00</option>
-                                        <option value="18:00">18:00 - 19:00</option>
-                                        <option value="19:00">19:00 - 20:00</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="aula-clase">Aula *</label>
-                                    <select id="aula-clase" required>
-                                        <option value="">Seleccionar aula</option>
-                                        <option value="1">Aula 1</option>
-                                        <option value="2">Aula 2</option>
-                                        <option value="3">Aula 3</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">💾 Guardar Alumno</button>
-                                <button type="button" class="btn btn-secondary" id="btn-cancelar">❌ Cancelar</button>
-                                <button type="button" class="btn btn-warning" id="btn-limpiar">🧹 Limpiar Formulario</button>
-                            </div>
-                        </form>
+        <input type="hidden" id="alumno-id">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" placeholder="Ingresa el nombre">
+            </div>
+            <div class="form-group">
+                <label for="apellido">Apellido</label>
+                <input type="text" id="apellido" placeholder="Ingresa el apellido">
+            </div>
+            <div class="form-group">
+                <label for="telefono">Teléfono</label>
+                <input type="tel" id="telefono" placeholder="+34 123 456 789">
+            </div>
+            <div class="form-group">
+                <label for="correo">Correo Electrónico</label>
+                <input type="email" id="correo" placeholder="alumno@rockschool.com">
+            </div>
+            <div class="form-group">
+                <label for="color">Color Identificador</label>
+                <input type="color" id="color" value="#e74c3c">
+            </div>
+            <div class="form-group">
+                <label for="estado">Estado</label>
+                <select id="estado">
+                    <option value="activo">Activo</option>
+                    <option value="inactivo">Inactivo</option>
+                    <option value="pendiente">Pendiente</option>
+                </select>
+            </div>
+        </div>
+        
+        <h4 style="margin: 2rem 0 1.5rem 0; color: var(--secondary-color); font-size: 1.2rem; border-bottom: 2px solid var(--primary-color); padding-bottom: 0.5rem;">Horario del Alumno (Opcional)</h4>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="instrumento">Instrumento</label>
+                <select id="instrumento">
+                    <option value="">Seleccionar instrumento</option>
+                    <option value="bateria">🥁 Batería</option>
+                    <option value="canto">🎤 Canto</option>
+                    <option value="guitarra">🎸 Guitarra</option>
+                    <option value="bajo">🎸 Bajo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dia-clase">Día de Clase</label>
+                <select id="dia-clase">
+                    <option value="">Seleccionar día</option>
+                    <option value="lunes">Lunes</option>
+                    <option value="martes">Martes</option>
+                    <option value="miercoles">Miércoles</option>
+                    <option value="jueves">Jueves</option>
+                    <option value="viernes">Viernes</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="hora-clase">Hora de Clase</label>
+                <select id="hora-clase">
+                    <option value="">Seleccionar hora</option>
+                    <option value="16:00">16:00 - 17:00</option>
+                    <option value="17:00">17:00 - 18:00</option>
+                    <option value="18:00">18:00 - 19:00</option>
+                    <option value="19:00">19:00 - 20:00</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="aula-clase">Aula</label>
+                <select id="aula-clase">
+                    <option value="">Seleccionar aula</option>
+                    <option value="1">Aula 1</option>
+                    <option value="2">Aula 2</option>
+                    <option value="3">Aula 3</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">💾 Guardar Alumno</button>
+            <button type="button" class="btn btn-secondary" id="btn-cancelar">❌ Cancelar</button>
+            <button type="button" class="btn btn-warning" id="btn-limpiar">🧹 Limpiar Formulario</button>
+        </div>
+    </form>
                     </div>
                     
                     <div class="table-container">
                         <div class="table-header">
-                            <h3>Lista de Alumnos</h3>
+                            <h3>Lista de Alumnos - Rockschool Málaga</h3>
                             <div class="filtros">
                                 <input type="text" id="buscar-alumno" placeholder="Buscar alumno...">
                                 <select id="filtro-estado">
@@ -1024,6 +1294,10 @@
                                 <option value="viernes">Viernes</option>
                             </select>
                             <button class="btn btn-primary" id="btn-hoy">Hoy</button>
+                            <div class="vista-buttons">
+                                <button class="btn-vista active" id="btn-vista-diaria">Vista Día</button>
+                                <button class="btn-vista" id="btn-vista-semanal">Vista Semana</button>
+                            </div>
                             <button class="btn btn-secondary" id="btn-imprimir-horario">🖨️ Imprimir</button>
                         </div>
                     </div>
@@ -1034,6 +1308,7 @@
                             <div class="filtros">
                                 <span class="badge badge-primary" id="total-clases-dia">0 clases</span>
                                 <span class="badge badge-success" id="aulas-disponibles">3 aulas disponibles</span>
+                                <span class="badge badge-info" id="estadisticas-extra"></span>
                             </div>
                         </div>
                         <div class="horario-grid" id="horario-grid"></div>
@@ -1073,7 +1348,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="contenido-anotacion">Contenido *</label>
-                                <textarea id="contenido-anotacion" rows="4" required placeholder="Describe la anotación..."></textarea>
+                                <textarea id="contenido-anotacion" rows="5" required placeholder="Describe la anotación..."></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">📝 Guardar Anotación</button>
                         </form>
@@ -1110,19 +1385,19 @@
                 <!-- Gestión de Aulas -->
                 <section id="aulas" class="tab-content">
                     <div class="stats-grid">
-                        <div class="stat-card aula-1" style="color: white;">
+                        <div class="stat-card aula-1">
                             <h3>Aula 1</h3>
                             <div class="stat-number" id="estado-aula-1">Disponible</div>
                             <div>Capacidad: <span id="capacidad-aula-1">0/0</span></div>
                             <div class="stat-trend" id="trend-aula-1">--</div>
                         </div>
-                        <div class="stat-card aula-2" style="color: white;">
+                        <div class="stat-card aula-2">
                             <h3>Aula 2</h3>
                             <div class="stat-number" id="estado-aula-2">Disponible</div>
                             <div>Capacidad: <span id="capacidad-aula-2">0/0</span></div>
                             <div class="stat-trend" id="trend-aula-2">--</div>
                         </div>
-                        <div class="stat-card aula-3" style="color: white;">
+                        <div class="stat-card aula-3">
                             <h3>Aula 3</h3>
                             <div class="stat-number" id="estado-aula-3">Disponible</div>
                             <div>Capacidad: <span id="capacidad-aula-3">0/0</span></div>
@@ -1210,13 +1485,14 @@
                 const toast = document.createElement('div');
                 toast.className = `toast ${type}`;
                 toast.innerHTML = `
-                    <span class="nav-icon">${this.getIcon(type)}</span>
-                    <span>${message}</span>
+                    <span style="font-size: 1.25rem;">${this.getIcon(type)}</span>
+                    <span style="font-weight: 500;">${message}</span>
                 `;
                 container.appendChild(toast);
                 
                 setTimeout(() => {
-                    toast.remove();
+                    toast.style.animation = 'slideInRight 0.4s reverse';
+                    setTimeout(() => toast.remove(), 400);
                 }, duration);
             }
             
@@ -1268,11 +1544,25 @@
                     
                     // Update page title
                     const pageTitle = document.getElementById('page-title');
-                    pageTitle.textContent = this.textContent.trim();
+                    const tabName = this.textContent.trim();
+                    pageTitle.textContent = `${tabName} - Rockschool Málaga`;
                     
                     // Show toast notification
-                    Toast.show(`Navegando a: ${this.textContent.trim()}`, 'info', 2000);
+                    Toast.show(`Navegando a: ${tabName}`, 'info', 2000);
                 });
+            });
+            
+            // Vista buttons functionality
+            document.getElementById('btn-vista-diaria')?.addEventListener('click', function() {
+                this.classList.add('active');
+                document.getElementById('btn-vista-semanal').classList.remove('active');
+                Toast.show('Cambiado a vista diaria', 'info');
+            });
+            
+            document.getElementById('btn-vista-semanal')?.addEventListener('click', function() {
+                this.classList.add('active');
+                document.getElementById('btn-vista-diaria').classList.remove('active');
+                Toast.show('Cambiado a vista semanal', 'info');
             });
             
             // Demo data for empty states
@@ -1281,7 +1571,7 @@
                     el.classList.remove('loading');
                     el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📊</div><h3>No hay datos disponibles</h3><p>Los datos se cargarán cuando agregues información al sistema</p></div>';
                 });
-            }, 1500);
+            }, 2000);
             
             // Print functionality
             document.getElementById('btn-imprimir-horario')?.addEventListener('click', function() {
@@ -1308,14 +1598,32 @@
             document.getElementById('btn-limpiar')?.addEventListener('click', function() {
                 document.getElementById('form-alumno').reset();
                 document.getElementById('alumno-id').value = '';
+                document.getElementById('color').value = '#e74c3c';
                 Toast.show('Formulario limpiado', 'info');
             });
             
             // Demo toast on load
             setTimeout(() => {
-                Toast.show('Sistema Music School Pro cargado correctamente', 'success');
+                Toast.show('🎸 Rockschool Málaga - Sistema cargado correctamente', 'success', 3000);
             }, 1000);
+
+            // Admin buttons placeholder functionality
+            document.getElementById('btn-crear-respaldo')?.addEventListener('click', () => {
+                Toast.show('Función de respaldo disponible con el sistema de almacenamiento', 'info');
+            });
+
+            document.getElementById('btn-ejecutar-mantenimiento')?.addEventListener('click', () => {
+                Toast.show('Mantenimiento ejecutado correctamente', 'success');
+            });
         });
     </script>
+    <script src="js/storage.js"></script>
+    <script src="js/alumnos.js"></script>
+    <script src="js/anotaciones.js"></script>
+    <script src="js/horario.js"></script>
+    <script src="js/aulas.js"></script>
+    <script src="js/admin-datos.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/reportes.js"></script>
 </body>
 </html>

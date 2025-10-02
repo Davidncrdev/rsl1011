@@ -1,6 +1,6 @@
+// anotaciones.js - Gestor de Anotaciones Actualizado
 class GestorAnotaciones {
     constructor() {
-        this.anotaciones = JSON.parse(localStorage.getItem('anotaciones')) || [];
         this.init();
     }
 
@@ -31,55 +31,44 @@ class GestorAnotaciones {
         const tipo = document.getElementById('tipo-anotacion').value;
         const contenido = document.getElementById('contenido-anotacion').value;
         
-        const alumno = gestorAlumnos.obtenerAlumnoPorId(alumnoId);
+        const alumno = almacenamiento.obtenerAlumnoPorId(alumnoId);
         
         if (!alumno) {
-            alert('Selecciona un alumno válido');
+            Toast.show('Selecciona un alumno válido', 'warning');
             return;
         }
         
-        const anotacion = {
-            id: 'anotacion_' + Date.now(),
+        const anotacionData = {
             fecha,
             hora,
             alumnoId,
             alumnoNombre: `${alumno.nombre} ${alumno.apellido}`,
             alumnoColor: alumno.color,
             tipo,
-            contenido,
-            fechaCreacion: new Date().toISOString(),
-            usuario: 'Administrador' // En un sistema real, esto vendría del usuario logueado
+            contenido
         };
         
-        this.anotaciones.unshift(anotacion); // Agregar al inicio
-        this.guardarEnLocalStorage();
-        this.cargarListaAnotaciones();
+        const anotacionGuardada = almacenamiento.guardarAnotacion(anotacionData);
         
-        // Limpiar formulario
-        document.getElementById('contenido-anotacion').value = '';
-        
-        // Restablecer fecha y hora actual
-        const hoy = new Date().toISOString().split('T')[0];
-        document.getElementById('fecha-anotacion').value = hoy;
-        document.getElementById('hora-anotacion').value = new Date().toTimeString().substring(0, 5);
-        
-        alert('✅ Anotación guardada correctamente');
-        
-        // Actualizar dashboard
-        if (window.app) {
-            window.app.actualizarDashboard();
+        if (anotacionGuardada) {
+            this.cargarListaAnotaciones();
+            document.getElementById('contenido-anotacion').value = '';
+            
+            // Restablecer fecha y hora actual
+            const hoy = new Date().toISOString().split('T')[0];
+            document.getElementById('fecha-anotacion').value = hoy;
+            document.getElementById('hora-anotacion').value = new Date().toTimeString().substring(0, 5);
+            
+            Toast.show('✅ Anotación guardada correctamente', 'success');
         }
     }
 
     eliminarAnotacion(id) {
         if (confirm('¿Estás seguro de que quieres eliminar esta anotación?')) {
-            this.anotaciones = this.anotaciones.filter(anotacion => anotacion.id !== id);
-            this.guardarEnLocalStorage();
-            this.cargarListaAnotaciones();
-            
-            // Actualizar dashboard
-            if (window.app) {
-                window.app.actualizarDashboard();
+            const exito = almacenamiento.eliminarAnotacion(id);
+            if (exito) {
+                this.cargarListaAnotaciones();
+                Toast.show('Anotación eliminada correctamente', 'success');
             }
         }
     }
@@ -90,25 +79,16 @@ class GestorAnotaciones {
         const filtroAlumno = document.getElementById('filtro-alumno-anotacion').value;
         const filtroTipo = document.getElementById('filtro-tipo-anotacion').value;
         
-        let anotacionesFiltradas = this.anotaciones;
+        const anotaciones = almacenamiento.obtenerAnotaciones({
+            fecha: filtroFecha,
+            alumnoId: filtroAlumno,
+            tipo: filtroTipo
+        });
         
-        // Aplicar filtros
-        if (filtroFecha) {
-            anotacionesFiltradas = anotacionesFiltradas.filter(anotacion => anotacion.fecha === filtroFecha);
-        }
-        
-        if (filtroAlumno) {
-            anotacionesFiltradas = anotacionesFiltradas.filter(anotacion => anotacion.alumnoId === filtroAlumno);
-        }
-        
-        if (filtroTipo) {
-            anotacionesFiltradas = anotacionesFiltradas.filter(anotacion => anotacion.tipo === filtroTipo);
-        }
-        
-        if (anotacionesFiltradas.length === 0) {
+        if (anotaciones.length === 0) {
             contenedor.innerHTML = `
-                <div style="padding: 3rem; text-align: center; color: #666;">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
+                <div class="empty-state">
+                    <div class="empty-state-icon">📝</div>
                     <h3>No se encontraron anotaciones</h3>
                     <p>Comienza agregando tu primera anotación</p>
                 </div>
@@ -118,8 +98,8 @@ class GestorAnotaciones {
         
         let html = '<div style="padding: 1rem;">';
         
-        anotacionesFiltradas.forEach(anotacion => {
-            const alumno = gestorAlumnos.obtenerAlumnoPorId(anotacion.alumnoId);
+        anotaciones.forEach(anotacion => {
+            const alumno = almacenamiento.obtenerAlumnoPorId(anotacion.alumnoId);
             
             html += `
                 <div class="anotacion-item" style="border-left: 4px solid ${anotacion.alumnoColor}">
@@ -133,8 +113,8 @@ class GestorAnotaciones {
                             ${this.formatearTipo(anotacion.tipo)}
                         </span>
                     </div>
-                    <div class="anotacion-contenido" style="margin: 1rem 0; line-height: 1.6;">
-                        ${this.formatearContenido(anotacion.contenido)}
+                    <div class="anotacion-contenido" style="margin: 1rem 0; line-height: 1.6; white-space: pre-line;">
+                        ${anotacion.contenido}
                     </div>
                     <div class="anotacion-acciones" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem; color: #666;">
                         <div>
@@ -174,24 +154,14 @@ class GestorAnotaciones {
         return tipos[tipo] || tipo;
     }
 
-    formatearContenido(contenido) {
-        // Convertir saltos de línea en <br>
-        return contenido.replace(/\n/g, '<br>');
-    }
-
     cargarFormulario() {
-        // Esta función se llama cuando se carga la página para inicializar el formulario
         const hoy = new Date().toISOString().split('T')[0];
         document.getElementById('fecha-anotacion').value = hoy;
         document.getElementById('hora-anotacion').value = new Date().toTimeString().substring(0, 5);
     }
 
-    guardarEnLocalStorage() {
-        localStorage.setItem('anotaciones', JSON.stringify(this.anotaciones));
-    }
-
     obtenerAnotaciones() {
-        return this.anotaciones;
+        return almacenamiento.obtenerAnotaciones();
     }
 }
 

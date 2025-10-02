@@ -75,6 +75,11 @@ class App {
             case 'aulas':
                 this.gestorAulas.actualizarEstadoAulas();
                 break;
+
+            case 'admin-datos':
+                gestorAdministracion.actualizarEstadisticas();
+                break;
+
         }
     }
 
